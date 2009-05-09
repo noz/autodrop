@@ -1,0 +1,17 @@
+# configration file for autodrop
+# -*-ruby-*-
+
+# $1 must match with an IP address
+MESSAGES_TO_WATCH =
+  [
+   # OpenSSH
+   /Invalid user [^\s]+ from (.+)/,
+   /Address (.+) maps to [^\s]+, but this does not map back to the address - POSSIBLE BREAK-IN ATTEMPT!/,
+  ]
+
+COUNT_MAX = 3
+INTERVAL = 10 # sec
+
+IPTABLES_PROGRAM = '/sbin/iptables'
+PIDFILE = '/var/run/autodrop.pid'
+WATCH_FIFO = '/var/log/authfifo'
