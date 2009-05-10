@@ -2,7 +2,6 @@
 
 FILES = [
          'ChangeLog',
-         'Makefile',
          'Rakefile',
          'bin/autodrop',
          'bin/autodrop.rb',
@@ -44,4 +43,33 @@ end
 Rake::GemPackageTask.new(spec) do |pkg|
   pkg.need_zip = true
   pkg.need_tar = true
+end
+
+#
+# for manual installation (without rubygem)
+#
+
+DEFAULT_BIN_INSTALL_DIR = '/usr/local/sbin'
+DEFAULT_CONF_INSTALL_DIR = '/etc'
+
+desc "Install (without rubygem)"
+task :install => "bin/autodrop" do
+  bin_install_dir = ENV['BIN_INSTALL_DIR']
+  bin_install_dir ||= DEFAULT_BIN_INSTALL_DIR
+  conf_install_dir = ENV['CONF_INSTALL_DIR']
+  conf_install_dir ||= DEFAULT_CONF_INSTALL_DIR
+  directory bin_install_dir
+  directory conf_install_dir
+  sh "cp -f bin/autodrop #{bin_install_dir}/autodrop"
+  sh "cp -f conf/autodrop.conf.default #{conf_install_dir}/autodrop.conf.default"
+end
+
+desc "Uninstall (without rubygem)"
+task :uninstall do
+  bin_install_dir = ENV['BIN_INSTALL_DIR']
+  bin_install_dir ||= DEFAULT_BIN_INSTALL_DIR
+  conf_install_dir = ENV['CONF_INSTALL_DIR']
+  conf_install_dir ||= DEFAULT_CONF_INSTALL_DIR
+  sh "rm -f #{bin_install_dir}/autodrop"
+  sh "rm -f #{conf_install_dir}/autodrop.conf.default"
 end
