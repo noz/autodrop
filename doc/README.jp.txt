@@ -1,6 +1,6 @@
 autodrop README
 
-2009, NOZAWA Hiromasa, Tokyo, Japan
+NOZAWA Hiromasa, Tokyo, Japan
 
 
 = 概要
@@ -99,6 +99,7 @@ syslog に吐きます。
 	------------------------------
 	MESSAGES_TO_WATCH =
 	  [
+           # OpenSSH's
 	   /Invalid user [^\s]+ from (.+)/,
 	   /Address (.+) maps to.*POSSIBLE BREAK-IN ATTEMPT!/,
 	  ]
@@ -155,10 +156,7 @@ syslog に吐きます。
 	------------------------------
 syslog.conf に登録する。
 	------------------------------
-	auth,authpriv.*		/var/log/auth.log
-
-	# こんな感じ
-	auth.*			|/var/log/authfifo
+	authpriv.*		|/var/log/authfifo
 	------------------------------
 
 「|」で名前つきパイプへの出力になる。詳しくは syslog.conf(5) で。

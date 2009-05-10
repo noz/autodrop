@@ -1,6 +1,6 @@
 autodrop README
 
-2009, NOZAWA Hiromasa, Tokyo Japan
+NOZAWA Hiromasa, Tokyo Japan
 
 
 = About
@@ -23,7 +23,7 @@ on many log files.  You need syslogd which can output logs to named
 pipe.
 
 Autodrop is written in Ruby scripting language then surely it will not
-suit for very high traffic sites.  However it works well to shut up
+suit for very high traffic sites.  However it works well to shut out
 port 22 knockers for my small site.
 
 Using autodrop can also shut out yourself from your host.  Be careful.
@@ -99,6 +99,7 @@ These are Ruby's constant variables.
 	------------------------------
 	MESSAGES_TO_WATCH =
 	  [
+           # OpenSSH's
 	   /Invalid user [^\s]+ from (.+)/,
 	   /Address (.+) maps to.*POSSIBLE BREAK-IN ATTEMPT!/,
 	  ]
@@ -153,12 +154,9 @@ Create fifo,
 	------------------------------
 	mkfifo /var/log/authfifo
 	------------------------------
-and add it to your syslog.conf .
+and add it to your syslog.conf
 	------------------------------
-	auth,authpriv.*		/var/log/auth.log
-
-	# this
-	auth.*			|/var/log/authfifo
+	authpriv.*	|/var/log/authfifo
 	------------------------------
 
 `|' means `out put logs to this pipe'.
