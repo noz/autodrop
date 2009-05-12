@@ -1,0 +1,4 @@
+Wed May 13 06:32:32 2009  noz  <noz@delta>
+
+	* Rakefile: disable gem tasks when rubygems is not present
+

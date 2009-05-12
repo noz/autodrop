@@ -25,24 +25,28 @@ task :distclean => [ :clobber_package ] do
   sh "rm -f bin/autodrop"
 end
 
-task :gem => [ "bin/autodrop" ]
-require 'rubygems'
-require 'rake/gempackagetask'
-spec = Gem::Specification.new do |s|
-  s.name = "autodrop"
-  s.version = "0.1.0"
-  s.author = "NOZAWA Hiromasa"
-  s.summary = "Automatic iptables DROP daemon"
-  s.homepage = 'http://rubyforge.org/projects/autodrop'
-  s.rubyforge_project = 'autodrop'
-  s.files = FILES
-  s.bindir = 'bin'
-  s.executables = 'autodrop'
-  s.require_path = []
-end
-Rake::GemPackageTask.new(spec) do |pkg|
-  pkg.need_zip = true
-  pkg.need_tar = true
+begin
+  task :gem => [ "bin/autodrop" ]
+  require 'rubygems'
+  require 'rake/gempackagetask'
+  spec = Gem::Specification.new do |s|
+    s.name = "autodrop"
+    s.version = "0.1.0"
+    s.author = "NOZAWA Hiromasa"
+    s.summary = "Automatic iptables DROP daemon"
+    s.homepage = 'http://rubyforge.org/projects/autodrop'
+    s.rubyforge_project = 'autodrop'
+    s.files = FILES
+    s.bindir = 'bin'
+    s.executables = 'autodrop'
+    s.require_path = []
+  end
+  Rake::GemPackageTask.new(spec) do |pkg|
+    pkg.need_zip = true
+    pkg.need_tar = true
+  end
+rescue LoadError
+  puts "# No rubygems. gem tasks are disabled."
 end
 
 #
