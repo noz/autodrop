@@ -44,13 +44,8 @@ begin
     # pkg.need_tar_bz2 = true
     # pkg.need_zip = true
   end
-
-  desc "Do distclean"
-  task :distclean => [ :clobber_package ] do
-    sh "rm -f bin/autodrop"
-  end
 rescue LoadError
-  puts "# No rubygems. gem tasks are disabled."
+  puts "# No rubygems. 'gem' task is disabled."
 
   require 'rake/packagetask'
   Rake::PackageTask.new PACKAGE_NAME, PACKAGE_VERSION do |p|
@@ -60,11 +55,11 @@ rescue LoadError
     # p.need_tar_bz2 = true
     # p.need_zip = true
   end
+end
 
-  desc "Do distclean"
-  task :distclean do
-    sh "rm -f bin/autodrop"
-  end
+desc "Do distclean"
+task :distclean => [ :clobber_package ] do
+  sh "rm -f bin/autodrop"
 end
 
 #
