@@ -20,11 +20,6 @@ file "bin/autodrop" do
   sh "chmod 755 bin/autodrop"
 end
 
-desc "Do distclean"
-task :distclean => [ :clobber_package ] do
-  sh "rm -f bin/autodrop"
-end
-
 begin
   task :gem => [ "bin/autodrop" ]
   require 'rubygems'
@@ -45,8 +40,18 @@ begin
     pkg.need_zip = true
     pkg.need_tar = true
   end
+
+  desc "Do distclean"
+  task :distclean => [ :clobber_package ] do
+    sh "rm -f bin/autodrop"
+  end
 rescue LoadError
   puts "# No rubygems. gem tasks are disabled."
+
+  desc "Do distclean"
+  task :distclean do
+    sh "rm -f bin/autodrop"
+  end
 end
 
 #
