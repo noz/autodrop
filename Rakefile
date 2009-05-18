@@ -20,13 +20,16 @@ file "bin/autodrop" do
   sh "chmod 755 bin/autodrop"
 end
 
+PACKAGE_NAME = 'autodrop'
+PACKAGE_VERSION = '0.1.0'
+
 begin
   task :gem => [ "bin/autodrop" ]
   require 'rubygems'
   require 'rake/gempackagetask'
   spec = Gem::Specification.new do |s|
-    s.name = "autodrop"
-    s.version = "0.1.0"
+    s.name = PACKAGE_NAME
+    s.version = PACKAGE_VERSION
     s.author = "NOZAWA Hiromasa"
     s.summary = "Automatic iptables DROP daemon"
     s.homepage = 'http://rubyforge.org/projects/autodrop'
@@ -36,9 +39,10 @@ begin
     s.executables = 'autodrop'
     s.require_path = []
   end
-  Rake::GemPackageTask.new(spec) do |pkg|
-    pkg.need_zip = true
-    pkg.need_tar = true
+  Rake::GemPackageTask.new spec do |pkg|
+    pkg.need_tar_gz = true
+    # pkg.need_tar_bz2 = true
+    # pkg.need_zip = true
   end
 
   desc "Do distclean"
@@ -47,6 +51,15 @@ begin
   end
 rescue LoadError
   puts "# No rubygems. gem tasks are disabled."
+
+  require 'rake/packagetask'
+  Rake::PackageTask.new PACKAGE_NAME, PACKAGE_VERSION do |p|
+    p.package_dir = "pkg"
+    p.package_files.include FILES
+    p.need_tar_gz = true
+    # p.need_tar_bz2 = true
+    # p.need_zip = true
+  end
 
   desc "Do distclean"
   task :distclean do
