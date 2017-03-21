@@ -1,0 +1,66 @@
+autodrop
+
+ホストへのしつこいアクセスを iptables で弾くデーモン。
+
+名前つきパイプ経由の syslog のログを監視して、パターンにマッチするログ
+を繰り返し生じさせるホストを DROP するルールを追加する。
+
+syslogd が名前つきパイプへログを吐くよう設定する必要がある。
+
+INPUT テーブルに DROP ルールが溜まるので定期的な手動でのクリアが必要。
+
+この手のツールの常として自分を自分のホストから締め出すことも可能な点に
+注意。
+
+= インストール・実行
+
+gem を install したあと設定ファイルを /etc 等にコピー・編集。
+
+実行には同梱の autodrop.sh を使うとたぶん便利。
+
+= autodrop.conf
+
+フォーマットは YAML。
+
+- count
+  DROP を実行するまでのマッチ回数。デフォルトは 3。
+
+- drop-command
+  DROP に使うコマンド (とその引数)。
+  デフォルトは "/sbin/iptables -I INPUT -s %remote_address% -j DROP"。
+  "%remote_address%" の部分が DROP 対象とするホストの IP アドレスに置
+  き換えられる。
+
+- duration
+  マッチしてから監視を継続する秒数。デフォルトは 10 秒。
+  マッチするたびにリセットされる。
+
+- input
+  ログを読みとるパイプ。デフォルトは /var/log/authfifo。mkfifo(1) で作
+  り、syslogd 側の設定として syslog.conf に
+	------------------------------------------
+	authpriv.*		|/var/log/authfifo
+	------------------------------------------
+  のように書く必要がある。詳しくは syslog.conf(5) で。
+
+- log
+  起動、終了、DROP の発生など autodrop 自身のログ出力先。デフォルトは
+  syslog。これ以外の値を設定するとファイル名と見なし、そのファイルに出
+  力する。syslog のログにはプレフィクス `autodrop' をつける。
+
+- patterns
+  ログにマッチさせる正規表現文字列のリスト。
+  $1 がリモートホストの IP アドレスにマッチするように書くこと。
+
+- pidfile
+  PID ファイル名。PID ファイルはデーモン動作時にのみ作られる。
+  デフォルトは /var/run/autodrop.pid
+
+- verbose
+  yes か no (boolean)。デフォルトは no。だいたいデバッグ用。
+
+= ライセンス
+
+BSD-2-Clause
+
+#eof

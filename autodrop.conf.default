@@ -1,0 +1,24 @@
+# configration for autodrop. -*-yaml-*-
+
+input: /var/log/authfifo
+
+log: syslog
+# log: /var/log/autodrop.log
+# verbose: yes
+
+pidfile: /var/run/autodrop.pid
+
+drop-command: /sbin/iptables -I INPUT -s %remote_address% -j DROP
+# drop-command: /bin/echo %remote_address%
+
+count: 3
+duration: 10	# sec
+
+# $1 must match with an IP address
+patterns:
+  # OpenSSH
+  - "Address (.+) maps to [^\\s]+, but this does not map back to the address - POSSIBLE BREAK-IN ATTEMPT!"
+  - "Did not receive identification string from (.+)"
+  - "Failed password for .* from (.+) port .+ ssh2"
+  - "Invalid user .+ from (.+)"
+  - "Received disconnect from (.+): 11: .* \\[preauth\\]"
